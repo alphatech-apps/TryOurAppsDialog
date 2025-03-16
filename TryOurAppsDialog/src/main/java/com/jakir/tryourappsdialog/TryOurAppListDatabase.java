@@ -57,14 +57,19 @@ public class TryOurAppListDatabase extends SQLiteOpenHelper {
     }
 
     public boolean insertData(String packageName, String appName, String appIcon) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(PACKAGE_NAME, packageName);
-        contentValues.put(APP_NAME, appName);
-        contentValues.put(APP_ICON, appIcon);
-        long result = db.insert(TABLE_APPLIST, null, contentValues);
-        return result != -1; // returns true if data is inserted successfully
-    }
+        if (!checkIfPackageExists(packageName)){
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(PACKAGE_NAME, packageName);
+            contentValues.put(APP_NAME, appName);
+            contentValues.put(APP_ICON, appIcon);
+            long result = db.insert(TABLE_APPLIST, null, contentValues);
+            return result != -1; // returns true if data is inserted successfully
+        }else {
+            return false;
+        }
+ }
+
 
     public boolean checkIfPackageExists(String packageName) {
         SQLiteDatabase db = this.getReadableDatabase();
